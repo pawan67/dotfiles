@@ -5,3 +5,4 @@ Dotfiles are the customization files that are used to personalize your Linux or 
 # Current Setup Screenshot
 
 ![Alt Text](https://raw.githubusercontent.com/pawan67/dotfiles/main/.screenshots/screenshot-1.png)
+![Alt Text](https://raw.githubusercontent.com/pawan67/dotfiles/main/.screenshots/Selection_006.png)
