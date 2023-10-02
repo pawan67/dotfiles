@@ -34,11 +34,13 @@ from qtile_extras import widget
 from qtile_extras.widget.decorations import BorderDecoration
 #from qtile_extras.widget import StatusNotifier
 import colors
+from subprocess import call
 
 mod = "mod4"              # Sets mod key to SUPER/WINDOWS
 myTerm = "alacritty"      # My terminal of choice
-myBrowser = "brave" # My browser of choice
+myBrowser = "com.brave.Browser" # My browser of choice
 myEmacs = "emacsclient -c -a 'emacs' " # The space at the end is IMPORTANT!
+myFileManager = "thunar"
 
 # Allows you to input a name when adding treetab section.
 @lazy.layout.function
@@ -52,6 +54,12 @@ def minimize_all(qtile):
     for win in qtile.current_group.windows:
         if hasattr(win, "toggle_minimize"):
             win.toggle_minimize()
+            
+@lazy.function
+def maximize_all(qtile):
+    for win in qtile.current_group.windows:
+        if hasattr(win, "toggle_maximize"):
+            win.toggle_maximize()
 
 # A list of available commands that can be bound to keys can be found
 # at https://docs.qtile.org/en/latest/manual/config/lazy.html
@@ -60,6 +68,8 @@ keys = [
     Key([mod], "Return", lazy.spawn(myTerm), desc="Terminal"),
     Key([mod, "shift"], "Return", lazy.spawn("rofi -show drun"), desc='Run Launcher'),
     Key([mod], "b", lazy.spawn(myBrowser), desc='Web browser'),
+    Key([mod], "f", lazy.spawn(myFileManager), desc='Web browser'),
+    
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
     Key([mod, "shift"], "c", lazy.window.kill(), desc="Kill focused window"),
     Key([mod, "shift"], "r", lazy.reload_config(), desc="Reload the config"),
@@ -70,30 +80,30 @@ keys = [
     # Some layouts like 'monadtall' only need to use j/k to move
     # through the stack, but other layouts like 'columns' will
     # require all four directions h/j/k/l to move around.
-    Key([mod], "h", lazy.layout.left(), desc="Move focus to left"),
-    Key([mod], "l", lazy.layout.right(), desc="Move focus to right"),
-    Key([mod], "j", lazy.layout.down(), desc="Move focus down"),
-    Key([mod], "k", lazy.layout.up(), desc="Move focus up"),
+    Key([mod], "Left", lazy.layout.left(), desc="Move focus to left"),
+    Key([mod], "Right", lazy.layout.right(), desc="Move focus to right"),
+    Key([mod], "Down", lazy.layout.down(), desc="Move focus down"),
+    Key([mod], "Up", lazy.layout.up(), desc="Move focus up"),
     Key([mod], "space", lazy.layout.next(), desc="Move window focus to other window"),
 
     # Move windows between left/right columns or move up/down in current stack.
     # Moving out of range in Columns layout will create new column.
-    Key([mod, "shift"], "h",
+    Key([mod, "shift"], "Left",
         lazy.layout.shuffle_left(),
         lazy.layout.move_left().when(layout=["treetab"]),
         desc="Move window to the left/move tab left in treetab"),
 
-    Key([mod, "shift"], "l",
+    Key([mod, "shift"], "Right",
         lazy.layout.shuffle_right(),
         lazy.layout.move_right().when(layout=["treetab"]),
         desc="Move window to the right/move tab right in treetab"),
 
-    Key([mod, "shift"], "j",
+    Key([mod, "shift"], "Down",
         lazy.layout.shuffle_down(),
         lazy.layout.section_down().when(layout=["treetab"]),
         desc="Move window down/move down a section in treetab"
     ),
-    Key([mod, "shift"], "k",
+    Key([mod, "shift"], "Up",
         lazy.layout.shuffle_up(),
         lazy.layout.section_up().when(layout=["treetab"]),
         desc="Move window downup/move up a section in treetab"
@@ -122,17 +132,47 @@ keys = [
         desc="Grow window to the left"
     ),
 
+    #Screrenshot using shutter
+     Key([], 'Print', lazy.spawn('shutter -s -e')),
+    Key(['control'], 'Print', lazy.spawn('shutter -s -e')),
+
     # Grow windows up, down, left, right.  Only works in certain layouts.
     # Works in 'bsp' and 'columns' layout.
-    Key([mod, "control"], "h", lazy.layout.grow_left(), desc="Grow window to the left"),
-    Key([mod, "control"], "l", lazy.layout.grow_right(), desc="Grow window to the right"),
-    Key([mod, "control"], "j", lazy.layout.grow_down(), desc="Grow window down"),
-    Key([mod, "control"], "k", lazy.layout.grow_up(), desc="Grow window up"),
-    Key([mod], "n", lazy.layout.normalize(), desc="Reset all window sizes"),
-    Key([mod], "m", lazy.layout.maximize(), desc='Toggle between min and max sizes'),
-    Key([mod], "t", lazy.window.toggle_floating(), desc='toggle floating'),
-    Key([mod], "f", lazy.window.toggle_fullscreen(), desc='toggle fullscreen'),
-    Key([mod, "shift"], "m", minimize_all(), desc="Toggle hide/show all windows on current group"),
+    # Key([mod, "control"], "h", lazy.layout.grow_left(), desc="Grow window to the left"),
+    # Key([mod, "control"], "l", lazy.layout.grow_right(), desc="Grow window to the right"),
+    # Key([mod, "control"], "j", lazy.layout.grow_down(), desc="Grow window down"),
+    # Key([mod, "control"], "k", lazy.layout.grow_up(), desc="Grow window up"),
+    # Key([mod], "n", lazy.layout.normalize(), desc="Reset all window sizes"),
+    # Key([mod], "m", lazy.layout.maximize(), desc='Toggle between min and max sizes'),
+    # Key([mod], "t", lazy.window.toggle_floating(), desc='toggle floating'),
+    # Key([mod], "f", lazy.window.toggle_fullscreen(), desc='toggle fullscreen'),
+    Key([mod, "shift"], "n", maximize_all(), desc="Toggle hide/show all windows on current group"),
+    # RESIZE UP, DOWN, LEFT, RIGHT
+        Key([mod, "control"], "Right",
+            lazy.layout.grow_right(),
+            lazy.layout.grow(),
+            lazy.layout.increase_ratio(),
+            lazy.layout.delete(),
+            ),
+        Key([mod, "control"], "Left",
+            lazy.layout.grow_left(),
+            lazy.layout.shrink(),
+            lazy.layout.decrease_ratio(),
+            lazy.layout.add(),
+            ),
+        Key([mod, "control"], "Up",
+            lazy.layout.grow_up(),
+            lazy.layout.grow(),
+            lazy.layout.decrease_nmaster(),
+            ),
+        Key([mod, "control"], "Down",
+            lazy.layout.grow_down(),
+            lazy.layout.shrink(),
+            lazy.layout.increase_nmaster(),
+            ),
+            Key([mod], "n", lazy.window.toggle_maximize()),
+            Key([mod], "m", lazy.window.toggle_minimize()),
+            
 
     # Switch focus of monitors
     Key([mod], "period", lazy.next_screen(), desc='Move focus to next monitor'),
@@ -174,18 +214,17 @@ keys = [
 ]
 
 #Wallpaper / Screen
-screens = [
-    Screen(
-        wallpaper='/home/pawant/Pictures/ign_batman.png',
-        wallpaper_mode='stretch',
-    )
-]
+def set_wallpaper():
+    wallpaper_path = "/home/pawant/Pictures/image.png"  # Replace with the actual path to your wallpaper
+    call(["feh", "--bg-fill", wallpaper_path])
+
+set_wallpaper()
 groups = []
 group_names = ["1", "2", "3", "4", "5", "6", "7", "8", "9",]
 
-#group_labels = ["DEV", "WWW", "SYS", "DOC", "VBOX", "CHAT", "MUS", "VID", "GFX",]
+# group_labels = ["DEV", "WWW", "SYS", "DOC", "VBOX", "CHAT", "MUS", "VID", "GFX",]
 group_labels = ["1", "2", "3", "4", "5", "6", "7", "8", "9",]
-#group_labels = ["", "", "", "", "", "", "", "", "",]
+# group_labels = ["", "", "", "", "", "", "", "", "",]
 
 
 group_layouts = ["monadtall", "monadtall", "monadtall", "monadtall", "monadtall", "monadtall", "monadtall", "monadtall", "monadtall"]
@@ -293,7 +332,7 @@ widget_defaults = dict(
     font="Ubuntu Bold",
     fontsize = 12,
     padding = 0,
-    background=colors[0]
+    background="#181818"
 )
 
 extension_defaults = widget_defaults.copy()
@@ -312,11 +351,11 @@ def init_widgets_list():
                  foreground = colors[1]
         ),
         widget.GroupBox(
-                 fontsize = 11,
+                 fontsize = 12,
                  margin_y = 3,
-                 margin_x = 4,
+                 margin_x = 5,
                  padding_y = 2,
-                 padding_x = 3,
+                 padding_x = 5,
                  borderwidth = 3,
                  active = colors[8],
                  inactive = colors[1],
@@ -349,7 +388,7 @@ def init_widgets_list():
                  text = '|',
                  font = "Ubuntu Mono",
                  foreground = colors[1],
-                 padding = 2,
+                 padding = 5,
                  fontsize = 14
                  ),
         widget.WindowName(
@@ -475,6 +514,7 @@ if __name__ in ["config", "__main__"]:
     widgets_list = init_widgets_list()
     widgets_screen1 = init_widgets_screen1()
     widgets_screen2 = init_widgets_screen2()
+    
 
 # Drag floating layouts.
 mouse = [
