@@ -1,100 +1,117 @@
-#
+#    _               _              
+#   | |__   __ _ ___| |__  _ __ ___ 
+#   | '_ \ / _` / __| '_ \| '__/ __|
+#  _| |_) | (_| \__ \ | | | | | (__ 
+# (_)_.__/ \__,_|___/_| |_|_|  \___|
+# 
+# by Stephan Raabe (2023)
+# -----------------------------------------------------
 # ~/.bashrc
-#
+# -----------------------------------------------------
 
-neofetch
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
+PS1='[\u@\h \W]\$ '
 
-[[ -f ~/.welcome_screen ]] && . ~/.welcome_screen
+# -----------------------------------------------------
+# ALIASES
+# -----------------------------------------------------
 
-_set_liveuser_PS1() {
-    PS1='[\u@\h \W]\$ '
-    if [ "$(whoami)" = "liveuser" ] ; then
-        local iso_version="$(grep ^VERSION= /usr/lib/endeavouros-release 2>/dev/null | cut -d '=' -f 2)"
-        if [ -n "$iso_version" ] ; then
-            local prefix="eos-"
-            local iso_info="$prefix$iso_version"
-            PS1="[\u@$iso_info \W]\$ "
-        fi
-    fi
-}
-_set_liveuser_PS1
-unset -f _set_liveuser_PS1
+alias c='clear'
+alias nf='neofetch'
+alias pf='pfetch'
+alias ls='exa -al'
+alias shutdown='systemctl poweroff'
+alias v='nvim'
+alias ts='~/dotfiles/scripts/snapshot.sh'
+alias matrix='cmatrix'
+alias wifi='nmtui'
+alias od='~/private/onedrive.sh'
+alias rw='~/dotfiles/waybar/reload.sh'
+alias winclass="xprop | grep 'CLASS'"
+alias dot="cd ~/dotfiles"
 
-ShowInstallerIsoInfo() {
-    local file=/usr/lib/endeavouros-release
-    if [ -r $file ] ; then
-        cat $file
-    else
-        echo "Sorry, installer ISO info is not available." >&2
-    fi
-}
+# -----------------------------------------------------
+# Window Managers
+# -----------------------------------------------------
 
+alias Qtile='startx'
 
-# ls
-TREE_IGNORE="cache|log|logs|node_modules|vendor"
+# -----------------------------------------------------
+# GIT
+# -----------------------------------------------------
 
-alias ls=' exa --group-directories-first'
-alias la=' ls -a'
-alias ll=' ls --git -l'
-alias lt=' ls --tree -D -L 2 -I ${TREE_IGNORE}'
-alias ltt=' ls --tree -D -L 3 -I ${TREE_IGNORE}'
-alias lttt=' ls --tree -D -L 4 -I ${TREE_IGNORE}'
-alias ltttt=' ls --tree -D -L 5 -I ${TREE_IGNORE}'
+alias gs="git status"
+alias ga="git add"
+alias gc="git commit -m"
+alias gp="git push"
+alias gpl="git pull"
+alias gst="git stash"
+alias gsp="git stash; git pull"
+alias gcheck="git checkout"
 
+# -----------------------------------------------------
+# SCRIPTS
+# -----------------------------------------------------
 
-[[ "$(whoami)" = "root" ]] && return
+alias w='~/dotfiles/scripts/updatewal.sh'
+alias gr='python ~/dotfiles/scripts/growthrate.py'
+alias ChatGPT='python ~/mychatgpt/mychatgpt.py'
+alias chat='python ~/mychatgpt/mychatgpt.py'
+alias ascii='~/dotfiles/scripts/figlet.sh'
 
-[[ -z "$FUNCNEST" ]] && export FUNCNEST=100          # limits recursive functions, see 'man bash'
+# -----------------------------------------------------
+# VIRTUAL MACHINE
+# -----------------------------------------------------
 
-## Use the up and down arrow keys for finding a command in history
-## (you can write some initial letters of the command first).
-bind '"\e[A":history-search-backward'
-bind '"\e[B":history-search-forward'
+alias vm='~/private/launchvm.sh'
+alias lg='~/dotfiles/scripts/looking-glass.sh'
+alias vmstart='virsh --connect qemu:///system start win11'
+alias vmstop='virsh --connect qemu:///system destroy win11'
 
-################################################################################
-## Some generally useful functions.
-## Consider uncommenting aliases below to start using these functions.
-##
-## October 2021: removed many obsolete functions. If you still need them, please look at
-## https://github.com/EndeavourOS-archive/EndeavourOS-archiso/raw/master/airootfs/etc/skel/.bashrc
+# -----------------------------------------------------
+# EDIT CONFIG FILES
+# -----------------------------------------------------
 
-_open_files_for_editing() {
-    # Open any given document file(s) for editing (or just viewing).
-    # Note1:
-    #    - Do not use for executable files!
-    # Note2:
-    #    - Uses 'mime' bindings, so you may need to use
-    #      e.g. a file manager to make proper file bindings.
+alias confq='nvim ~/dotfiles/qtile/config.py'
+alias confp='nvim ~/dotfiles/picom/picom.conf'
+alias confb='nvim ~/dotfiles/.bashrc'
 
-    if [ -x /usr/bin/exo-open ] ; then
-        echo "exo-open $@" >&2
-        setsid exo-open "$@" >& /dev/null
-        return
-    fi
-    if [ -x /usr/bin/xdg-open ] ; then
-        for file in "$@" ; do
-            echo "xdg-open $file" >&2
-            setsid xdg-open "$file" >& /dev/null
-        done
-        return
-    fi
+# -----------------------------------------------------
+# EDIT NOTES
+# -----------------------------------------------------
 
-    echo "$FUNCNAME: package 'xdg-utils' or 'exo' is required." >&2
-}
+alias notes='vim ~/notes.txt'
 
-#------------------------------------------------------------
+# -----------------------------------------------------
+# SYSTEM
+# -----------------------------------------------------
 
-## Aliases for the functions above.
-## Uncomment an alias if you want to use it.
-##
+alias update-grub='sudo grub-mkconfig -o /boot/grub/grub.cfg'
+alias setkb='setxkbmap de;echo "Keyboard set back to de."'
 
-# alias ef='_open_files_for_editing'     # 'ef' opens given file(s) for editing
-# alias pacdiff=eos-pacdiff
-################################################################################
+# -----------------------------------------------------
+# SCREEN RESOLUTINS
+# -----------------------------------------------------
 
+# Qtile
+alias res1='xrandr --output DisplayPort-0 --mode 2560x1440 --rate 120'
+alias res2='xrandr --output DisplayPort-0 --mode 1920x1080 --rate 120'
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+export PATH="/usr/lib/ccache/bin/:$PATH"
+
+# -----------------------------------------------------
+# START STARSHIP
+# -----------------------------------------------------
+eval "$(starship init bash)"
+
+# -----------------------------------------------------
+# PYWAL
+# -----------------------------------------------------
+cat ~/.cache/wal/sequences
+
+# -----------------------------------------------------
+# PFETCH
+# -----------------------------------------------------
+echo ""
+pfetch
