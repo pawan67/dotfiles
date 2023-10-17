@@ -12,7 +12,7 @@
 # ----------------------------------------------------- 
 # Select wallpaper
 # ----------------------------------------------------- 
-selected=$(ls -1 ~/wallpaper | grep "jpg" | rofi -dmenu -p "Wallpapers")
+selected=$(ls -1 ~/wallpaper | grep "jpg" | rofi -dmenu -config ~/dotfiles/rofi/config-wallpaper.rasi -p "Wallpapers")
 
 if [ "$selected" ]; then
 
@@ -37,7 +37,8 @@ if [ "$selected" ]; then
     # ----------------------------------------------------- 
     # Set the new wallpaper
     # ----------------------------------------------------- 
-    swww img $wallpaper --transition-step 20 --transition-fps=20
+    swww img $wallpaper 
+
     ~/dotfiles/waybar/launch.sh
     sleep 1
 

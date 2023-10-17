@@ -54,7 +54,7 @@ alias gcheck="git checkout"
 # SCRIPTS
 # -----------------------------------------------------
 
-alias w='~/dotfiles/scripts/updatewal.sh'
+alias wallp='~/dotfiles/scripts/updatewal.sh'
 alias gr='python ~/dotfiles/scripts/growthrate.py'
 alias ChatGPT='python ~/mychatgpt/mychatgpt.py'
 alias chat='python ~/mychatgpt/mychatgpt.py'
@@ -99,6 +99,9 @@ alias res1='xrandr --output DisplayPort-0 --mode 2560x1440 --rate 120'
 alias res2='xrandr --output DisplayPort-0 --mode 1920x1080 --rate 120'
 
 export PATH="/usr/lib/ccache/bin/:$PATH"
+export JAVA_HOME=/usr/lib/jvm/java-21-openjdk
+export PATH=$PATH:$JAVA_HOME/bin
+
 
 # -----------------------------------------------------
 # START STARSHIP
@@ -115,3 +118,9 @@ cat ~/.cache/wal/sequences
 # -----------------------------------------------------
 echo ""
 pfetch
+
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+export PATH="$PATH:/opt/android-sdk/platform-tools"
+

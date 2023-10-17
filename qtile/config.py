@@ -62,19 +62,6 @@ browser = "brave"
 # --------------------------------------------------------
 mod = "mod4"
 
-# A function for hide/show all the windows in a group
-@lazy.function
-def minimize_all(qtile):
-    for win in qtile.current_group.windows:
-        if hasattr(win, "toggle_minimize"):
-            win.toggle_minimize()
-            
-@lazy.function
-def maximize_all(qtile):
-    for win in qtile.current_group.windows:
-        if hasattr(win, "toggle_maximize"):
-            win.toggle_maximize()
-
 keys = [
 
     # Focus
@@ -116,17 +103,6 @@ keys = [
 
     # Fullscreen
     Key([mod], "f", lazy.window.toggle_fullscreen()),
-
-    # Minimize
-    Key([mod], "m", lazy.window.toggle_minimize(), desc="Minimize the current window"),
-    
-    # Maximize
-    Key([mod], "x", lazy.window.toggle_maximize(), desc="Toggle maximize the current window"),
-
-     # Keybinding to reset (unminimize) all minimized windows
-    Key([mod, "shift"], "m", maximize_all(), desc="Restore all minimized windows"),
-    
-    
 
     #System
     Key([mod], "q", lazy.window.kill(), desc="Kill focused window"),
@@ -201,8 +177,8 @@ ColorI=(colordict['colors']['color9'])
 layout_theme = { 
     "border_width": 3,
     "margin": 15,
-    "border_focus": "FFFFFF",
-    "border_normal": ColorC,
+    "border_focus": ColorC,
+    "border_normal": "FFFFFF",
     "single_border_width": 3
 }
 

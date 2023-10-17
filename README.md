@@ -1,20 +1,19 @@
 This is the configuration of my Arch linux based installation.
-I'm using the Qtile Window Manager But this also includes configuration for Hyperland.
+
+
 
 ## Common Packages
 
 - Terminal: alacritty
-- Editor: nvim
 - Prompt: starship
 - Icons: Font Awesome
 - Menus: Rofi
 - Colorscheme: pywal (dynamic)
-- Browsers: brave, chromium
+- Browsers: thorium
 - Filemanager: ranger, Thunar
 - Cursor: Bibata Modern Classic
 - Icons: breeze-dark
 - Theme: Breeze-dark
-- Virtual Machine: qemu (Windows 11 with looking glass and xrdp)
 
 
 ## Qtile

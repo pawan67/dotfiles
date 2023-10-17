@@ -13,7 +13,7 @@
 
     // Position TOP
     "layer": "top",
-    "margin-top": 14,
+    "margin-top": 5,
     "margin-bottom": 0,
 
     // Position BOTTOM
@@ -22,7 +22,7 @@
     // "margin-bottom": 14,
     
     "layer": "top",
-    "height": 16,
+    "height": 12,
     "margin-left": 0,
     "margin-right": 0,    
     "spacing": 0,
@@ -33,6 +33,7 @@
     // Modules Left
     "modules-left": [
         "custom/appmenu",
+        "custom/wallpaper",
         "wlr/taskbar",
         "group/quicklinks",
         "hyprland/window"
@@ -45,13 +46,13 @@
 
     // Modules Right    
     "modules-right": [
-        "custom/updates",
+        // "custom/updates",
         "pulseaudio",
         "bluetooth",
         "battery", 
         "group/hardware",
+        "custom/cliphist",
         "custom/exit",
-        "network",
         "clock"
     ],
 

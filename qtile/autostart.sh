@@ -16,7 +16,8 @@ xrandr --rate 120
 # xrandr --outout Virtual-1 --mode 1920x1080
 
 # Set keyboard mapping
-setxkbmap en
+setxkbmap de
+# setxkbmap en
 
 # Load picom
 picom &
@@ -28,15 +29,10 @@ xfce4-power-manager &
 dunst &
 
 # Launch polybar
-#~/dotfiles/polybar/launch.sh &
-sleep 2 && polybar mybar 2> ~/.polybar.log &
-
+~/dotfiles/polybar/launch.sh &
 
 # Setup Wallpaper and update colors
 ~/dotfiles/scripts/updatewal.sh &
 
 # Load Windows 11 VM
 # virsh --connect qemu:///system start win11
-
-# Load Alt + Tab
-alttab -fg "#F1B4BB" -bg "#132043" -frame "#FDF0F0" -t 128x150 -i 127x64

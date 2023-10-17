@@ -5,3 +5,4 @@
 # -------------------------------
 
 exec qtile start
+export XDG_SESSION_TYPE=x11
